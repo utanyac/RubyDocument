@@ -6,8 +6,10 @@
 
 ### 语言特性
 
-- 简介直观：约定优于配置。
-- 灵活性：一种动态类型的语言，不需要事先声明属性。
+- 简介直观：约定优于配置（用默认的约定减少系统的配置）
+- 面向对象。
+- 灵活性：一种**动态类型**的语言，不需要事先声明属性。（Java是静态类型，需要声明变量类型，一旦声明类型就不能改变了，ruby 可以在运行时改变变量类型）
+- Java广泛用于企业级应用、安卓应用开发和大型系统，而Ruby特别适合于快速开发小型到中型的Web应用，尤其是使用Ruby on Rails框架。
 
 ### 参考资料
 
@@ -22,11 +24,11 @@
 
 - Windows 系统下建议使用 RubyInstaller 来安装Ruby：https://rubyinstaller.org/downloads/
 
-  选择带有DEVKIT的版本下载：Ruby+Devkit 3.3.1-1(x64)
+  选择带有DEVKIT的版本下载：Ruby+Devkit (x64)
 
   也可以走国内镜像网站下载：[RubyInstaller for Windows - 国内镜像](https://rubyinstaller.cn/)
 
-- 双击rubyinstaller-devkit-3.3.1-1-x64.exe，选择安装路径后下载。
+- 双击rubyinstaller.exe，选择安装路径后下载。
 
   安装时勾选 **Add Ruby executables to your PATH**，可以自动配置环境变量。
 
@@ -36,15 +38,24 @@
 
 ### Linux 环境安装 Ruby
 
-*todo*
+需要配合 docker 环境，暂不介绍，用到时再演示。
 
-### Ruby 版本与开发工具
+### Hello world
 
-Ruby：3.0以上版本
+- 新建一个txt文件，重命名为`helloworld.rb`
+- 编辑文件，在里面输入如下内容：
 
-Rubymine：
+```ruby
+puts "hello world!"
+```
 
-Rails：
+- 在当前路径打开cmd，输入：
+
+```ruby
+ruby helloworld.rb
+```
+
+- 可以观察到控制台输出`hello world！`
 
 ### 关于 RubyGems
 
@@ -65,7 +76,7 @@ gem update --system
 
 ## Ruby 语法
 
-### 代码格式
+### 1. 代码格式
 
 - Ruby 把分号和换行符解释为语句的结尾。
 - Ruby 大小写敏感。
@@ -74,11 +85,11 @@ gem update --system
 
 ------
 
-### 数据类型
+### 2. 数据类型
 
 Ruby 支持的数据类型包括基本的Number（数值）、String（字符串）、Ranges（范围）、Symbols，以及true、false和nil这几个特殊值。
 
-> 需要关注：①双引号字符串中引用变量；②Ranges类型变量的使用
+> 需要关注：①双引号字符串中引用变量；②Ranges类型变量的使用；③只有 false 和 nil 被评估为逻辑“假”
 
 ```ruby
 # 字符串类型 String
@@ -98,7 +109,7 @@ puts "range2 = #{range2}"
 
 ------
 
-### 变量
+### 3. 变量
 
 - **局部变量：**局部变量是在方法中定义的变量，在方法外是不可用的。
 - **实例变量：**实例变量以@开头。它是实例对象的一个属性，在对象的整个生命周期都是可用的，可以在类的任何实例方法中被访问和修改。**[Ruby的动态性导致需要实例变量]**
@@ -110,7 +121,7 @@ puts "range2 = #{range2}"
 
 ------
 
-### 方法
+### 4. 方法
 
 方法名必须以小写字母开头，且方法应在调用之前定义。
 
@@ -146,7 +157,7 @@ puts "method 3 = #{b}"
 
 ruby 中的类变量（@@）类似于 Java 的 static 静态变量，
 
-ruby 中的类方法类似于 Java 的 static 方法。
+ruby 中的类方法类似于 Java 的 static 方法。类方法通常用于那些与类的任何单个实例无关的操作
 
 与实例方法不同，类方法不需要实例化对象，可以通过类直接使用。
 
@@ -172,7 +183,7 @@ Accounts.say_hello2
 
 ------
 
-### 类
+### 5. 类
 
 类总是以关键字 *class* 开始，后跟类的名称。类名的首字母应该大写。
 
@@ -215,13 +226,13 @@ cust2.total_no_of_customers()
 
 ------
 
-### 运算符
+### 6. 运算符
 
 与 Java 大同小异，不做赘述。
 
 ------
 
-### 条件判断
+### 7. 条件判断
 
 #### if...else 语句
 
@@ -282,7 +293,7 @@ end
 
 ------
 
-### 循环
+### 8. 循环
 
 #### while 语句
 
@@ -296,7 +307,7 @@ while $i < $num  do
    $i +=1
 end
 
-#写法2
+#写法2：这种写法总会先执行一次代码块，再判断条件
 begin
    puts("在循环语句中 i = #$i" )
    $i +=1
@@ -357,7 +368,7 @@ end
 
 ------
 
-### 块与 yield 语句
+### 9. 块与 yield 语句
 
 块（block）是封装了一段代码的对象，可以将代码块作为参数传递给方法，并在方法内部执行。
 
@@ -376,10 +387,8 @@ def example_method
 	puts "方法结束"
 end
 
+# 调用方法并传递块
 example_method { puts "这是块中的代码" }
-
-# 调用方法
-example_method
 ```
 
 也可以向yield传递参数：
@@ -389,10 +398,8 @@ def example_method_with_parameters
 	yield("Hello", "World")
 end
 
+# 调用方法并传递块
 example_method_with_parameters { |str1, str2| puts "#{str1} #{str2}" }
-
-# 调用方法
-example_method_with_parameters
 ```
 
 块本身可以作为方法参数被传递：
@@ -435,7 +442,7 @@ END 代码块
 
 ------
 
-### Array 与 Hash
+### 10. Array 与 Hash
 
 #### 数组 Array
 
@@ -477,16 +484,16 @@ end
 
 # 方法3：map：创建一个新数组，将原数组每个元素映射成新数组的值
 numbers = [1, 2, 3]
-squared_numbers = numbers.map { |number| number ** 2 #平方计算}
+squared_numbers = numbers.map { |number| number ** 2} #平方计算
 puts squared_numbers
 
 # 方法4：select：选择满足特定条件的所有元素并返回一个新数组
 numbers = [1, 2, 3]
-even_numbers = numbers.select { |number| number.even? #是否为偶数}
+even_numbers = numbers.select { |number| number.even?} #是否为偶数
 puts even_numbers
 
 # 方法5：reject：与 select 相反，返回不满足条件的元素组成的新数组：
-odd_numbers = numbers.reject { |number| number.even? #是否为偶数}
+odd_numbers = numbers.reject { |number| number.even?} #是否为偶数
 puts odd_numbers
 ```
 
@@ -541,7 +548,7 @@ merged_hash = hash1.merge(hash2)
 
 ------
 
-### 异常
+### 11. 异常
 
 Ruby 可以在 begin/end 块中附上可能抛出异常的代码，并使用 rescue 子句告诉 Ruby 要处理的异常类型。
 
@@ -590,7 +597,7 @@ raise ExceptionType, "Error Message" condition
 
 ## Ruby 面向对象
 
-### 基本概念
+### 1. 基本概念
 
 面向对象的编程语言特性包括：
 
@@ -659,7 +666,9 @@ a = box.getArea()
 puts "Area of the box is : #{a}"
 ```
 
-### 访问控制
+------
+
+### 2. 访问控制
 
 与 Java 类似，Ruby 提供了三个级别的实例方法保护：public，private，protected。
 
@@ -670,8 +679,6 @@ Ruby 不在实例和类变量上应用任何访问控制。
 - **Protected 方法：** Protected 方法只能被类及其子类的对象调用。访问也只能在类及其子类内部进行。
 
 ```ruby
-#!/usr/bin/ruby -w
- 
 # 定义类
 class Box
    # 构造器方法
@@ -719,7 +726,9 @@ test.rb:42: protected method `printArea' called for #
 <Box:0xb7f11280 @height=20, @width=10> (NoMethodError)
 ```
 
-### 类的继承
+------
+
+### 3. 类的继承
 
 总的来说与 Java 一致，都不支持传统意义上的多继承，即一个类直接继承多个父类，但都有其他机制实现类似多继承的效果，可以让一个类表现出多个类的特性。
 
@@ -758,13 +767,17 @@ box = BigBox.new(10, 20)
 box.printArea()
 ```
 
-### 重写与重载
+------
+
+### 4. 重写与重载
 
 - Ruby 中，当子类定义了一个与父类同名的方法时，这个方法会覆盖父类的方法。这与Java中的方法重写（method overriding）是相似的概念。
 
 - Ruby 中不支持类似于 Java 里的方法重载，因为 ruby 是动态类型语言。如果定义了两个同名方法，后一个定义会覆盖前一个定义
 
-### 模块 Module 与 Mixin
+------
+
+### 5. 模块 Module 与 Mixin
 
 模块（Module）是一种把方法、类和常量组合在一起的方式。模块实现了 Mixin 装置，提供了独立的命名空间，内部的方法和常量不会与其他位置的方法和常量冲突。
 
